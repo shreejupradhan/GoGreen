@@ -145,3 +145,52 @@
     left: 50%;
     transform: translate(-50%);
   }
+
+.h4 {
+    color: #4b5a20;
+    font-weight: normal;
+  }
+  .col-4 p {
+    font-size: 14px;
+  }
+  .rating .fa {
+    color: #fede00;
+  }
+  .col-4:hover {
+    transform: translateY(-5px);
+  }
+  .offer {
+    background: radial-gradient(#fff, #b1d8b7);
+    margin-top: 80px;
+    padding: 30px 0;
+  }
+  .col-2 .offer-img {
+    padding: 50px;
+  }
+  
+  .small {
+    color: #05445e;
+  }
+  
+  .testimonial {
+    padding-bottom: 40px;
+  }
+  .testimonial .col-3 {
+    text-align: center;
+    padding: 40px 20px;
+    box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.5s;
+  }
+  .testimonial .col-3 img {
+    width: 50px;
+    margin-top: 20px;
+    border-radius: 50%;
+  }
+  .testimonial .col-3:hover {
+    transform: translate(-10px);
+  }
+  .fa.fa-quote-left {
+    font-size: 34px;
+    color: #18a558;
+  }
