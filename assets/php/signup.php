@@ -1,3 +1,135 @@
+<?php
+include "../partials/_configure.php";
+session_start();
+if (isset($_POST['login-btn'])) {
+    $email = $_POST['email'];
+    $pword = $_POST['password'];
+    if (empty($email)) {
+        $error = "Email cannot be empty.";
+    } elseif (empty($pword)) {
+        $error = "Password cannot be empty.";
+    } elseif (empty($email) && empty($pword)) {
+        $error = "Fields cannot be empty.";
+    } else {
+        $error = "";
+        include_once '../partials/_configure.php';
+        $sql = "SELECT u_id, u_name, u_email, u_password FROM tbl_user WHERE u_email = '$email'";
+        $result = mysqli_query($conn, $sql);
+        if (mysqli_num_rows($result) > 0) {
+            $i = 0;
+            while ($row = mysqli_fetch_assoc($result)) {
+                $datas[$i] = array(
+                    "id" => $row['u_id'],
+                    "fullname" => $row['u_name'],
+                    "email" => $row['u_email'],
+                    "password" => $row['u_password'],
+                );
+                $i++;
+            }
+            $hash = password_hash($pword, PASSWORD_DEFAULT);
+            if (password_verify($pword, $datas[0]['password'])) {
+                $_SESSION['id'] = $datas[0]['id'];
+                $_SESSION['username'] = $datas[0]['fullname'];
+                mysqli_close($conn);
+                header("Location:/ecommerce/assets/php/view/user.php");
+            } else {
+                $error = "Password Incorrect.";
+            }
+        } else {
+            $error = "Account Doesn't Exist.";
+        }
+    }
+} else {
+    $error = "";
+}
+mysqli_close($conn);
+?>
+<?php
+include "../partials/_configure.php";
+session_start();
+if (isset($_POST['register-btn'])) {
+    if (isset($_POST['terms-checkbox'])) {
+        $full_name = $_POST['full-name'];
+        $address = $_POST['address'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $con_password = $_POST['confirm-password'];
+        //name verification
+        if (empty($full_name)) {
+            $error1 = "Cannot Be Empty.";
+        } else {
+            // check if name only contains letters and whitespace
+            if (!preg_match("/^[a-zA-Z-' ]*$/", $full_name)) {
+                $error1 = "Invalid Name.";
+            } else {
+                $error1 = "";
+            }
+        }
+        //email verification
+        if (empty($email)) {
+            $error2 = "Email is required.";
+        } else {
+            // check if e-mail address is well-formed
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $error2 = "Invalid email format.";
+            } else {
+                $error2 = "";
+            }
+        }
+        //address verification
+        $error3 = "";
+        //password and con verification
+        if (empty($password)) {
+            $error4 = "Password required.";
+        } else {
+            $error4 = "";
+        }
+        if (empty($con_password)) {
+            $error5 = "Confirm Password required.";
+        } else {
+            if ($password != $con_password) {
+                $error4 = "Password must be same.";
+                $error5 = "Confirm Password must be same.";
+            } else {
+                $error4 = "";
+                $error5 = "";
+            }
+        }
+        $acc_check = "";
+        // password hash    $result = mysqli_query($conn, $sql_getProducts);
+
+        if ($error1 == "" && $error2 == "" && $error3 == "" && $error4 == "" && $error5 == "") {
+            $hash1 = password_hash($password, PASSWORD_DEFAULT);
+            $sql = "SELECT * FROM ecommerce.tbl_user WHERE u_email = '" . $email . "'";
+            $result = mysqli_query($conn, $sql);
+            $count = mysqli_fetch_assoc($result);
+            if ($count > 0) {
+                $acc_check = "Account Already Exists.";
+            } else {
+                $sql2 = "INSERT into tbl_user (u_name, u_email, u_address, u_password) VALUES ('$full_name','$email','$address','$hash1')";
+                if (mysqli_query($conn, $sql2)) {
+                    header('Location: login.php');
+                }
+            }
+        }
+        //if errors
+        //sql
+    } else {
+        $error1 = "";
+        $error2 = "";
+        $error3 = "";
+        $error4 = "";
+        $error5 = "";
+        $acc_check = "Please read the Terms and Condition.";
+    }
+} else {
+    $error1 = "";
+    $error2 = "";
+    $error3 = "";
+    $error4 = "";
+    $error5 = "";
+    $acc_check = "";
+}
 <!DOCTYPE html>
 <html>
 
