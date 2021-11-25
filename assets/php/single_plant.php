@@ -1,3 +1,37 @@
+<?php
+	if (!isset($_POST['id'])) {
+    	echo "Error";
+	} else {
+    	$servername = "localhost";
+    	$username = "root";
+    	$password = "";
+    	$dbname = "gogreen";
+	
+    	// Create connection
+    	$conn = new mysqli($servername, $username, $password, $dbname);
+    	// Check connection
+    	if ($conn->connect_error) {
+        	die("Connection failed: " . $conn->connect_error);
+    	} else {
+        	$sql = 'SELECT * FROM tbl_products where p_id = ' . $_POST['id'] . ' LIMIT 1';
+	
+        	$result = mysqli_query($conn, $sql);
+        	if (mysqli_num_rows($result) > 0) {
+            	$i = 0;
+            	while ($row = mysqli_fetch_assoc($result)) {
+                	$plants[$i] = array(
+                    	"p_id" => $row['p_id'],
+                    	"p_name" => $row['p_name'],
+                    	"p_price" => $row['p_price'],
+                    	"p_image" => $row['p_image'],
+                    	"p_stock" => $row['p_stock'],
+                    	"p_description" => $row['p_description'],
+                	);
+                	$i++;
+            	}
+        	};
+            
+	?>
 <!DOCTYPE html>
         <html>
 
@@ -91,3 +125,5 @@
         </body>
 
         </html>
+        <?php }
+} ?>
