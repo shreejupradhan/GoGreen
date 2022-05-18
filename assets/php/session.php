@@ -1,5 +1,5 @@
 <?php
-
+d
 session_start();
 if (isset($_POST)) {
     $index = $_POST['hidden-cart-row-value'];
